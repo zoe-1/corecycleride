@@ -1,0 +1,19 @@
+{
+  "name": "sozo-cycle",
+  "version": "0.0.1",
+  "description": "Execute series of functions as waterfall",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "waterfall",
+    "lifecycle",
+    "series"
+  ],
+  "author": "Jon Swenson",
+  "license": "BSD-3-Clause"
+}
