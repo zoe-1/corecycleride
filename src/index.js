@@ -1,6 +1,5 @@
 'use strict';
 
-
 const internals = {};
 
 const R = class {
@@ -82,7 +81,7 @@ exports = module.exports = internals.Cycle = function (seriesName, arrayOfFuncs,
 
     this._series.push(end);
 
-
+    return this;
 
     // for (let i = 0; i < this._seriesLength; ++i) {
 
@@ -144,5 +143,4 @@ exports = module.exports = internals.Cycle = function (seriesName, arrayOfFuncs,
 
     // this[seriesName] = this._series[0].fn;
 
-    return this;
 };

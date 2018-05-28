@@ -1,5 +1,7 @@
 'use strict';
 
+const SozoCycle = require('../src/proxy');
+
 const Code = require('code');
 const Lab = require('lab');
 
@@ -10,27 +12,22 @@ const expect = Code.expect;
 
 const internals = {};
 
-const SozoCycle = require('../src');
 
-describe('/index', () => {
+describe.only('/proxy', () => {
 
-    it('build sozo request cycle', () => {
+    it('build sozo series from proxy', () => {
 
-        const ProcessData = new SozoCycle('boom', internals.requests, (err, result) => {
+        const Cycle = new SozoCycle('CycleName', 'DataStore');
 
-            console.log('FINISHED ' + err + ' ' + result);
-        });
+        console.log('Done');
 
-        console.log(Object.keys(ProcessData));
-        // const server = await University.init('test');
+        Cycle.start();
 
-        expect(ProcessData).to.be.an.object();
+        // console.log(Cycle);
+        // console.log('###### constructed');
 
-        ProcessData.series.execute('testOne');
-        // await server.stop({ timeout: 1 });
-
-
-
+        // const test = new Cycle('testName');
+        // console.log('###### disposition ' + test.disposition);
     });
 });
 
