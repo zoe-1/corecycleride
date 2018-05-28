@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "test"
+    "test": "lab -a code -t 100 -L -v"
   },
   "keywords": [
     "waterfall",
@@ -15,5 +15,9 @@
     "series"
   ],
   "author": "Jon Swenson",
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "code": "^5.2.0",
+    "lab": "^15.4.5"
+  }
 }
