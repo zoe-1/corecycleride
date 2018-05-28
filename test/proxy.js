@@ -19,9 +19,7 @@ describe.only('/proxy', () => {
 
         const Cycle = new SozoCycle('CycleName', 'DataStore');
 
-        console.log('Done');
-
-        Cycle.start();
+        Cycle.next('Dispostion is Set');
 
         expect(Cycle).to.be.an.object();
     });
