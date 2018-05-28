@@ -23,11 +23,7 @@ describe.only('/proxy', () => {
 
         Cycle.start();
 
-        // console.log(Cycle);
-        // console.log('###### constructed');
-
-        // const test = new Cycle('testName');
-        // console.log('###### disposition ' + test.disposition);
+        expect(Cycle).to.be.an.object();
     });
 });
 
