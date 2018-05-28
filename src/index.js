@@ -31,39 +31,16 @@ const R = class {
             return this.fn('requestObject', this.series[(this.index + 1)]);
         }
 
-
         console.log('#############');
         return this.fn(null, 'RESULT_VALUE');
     }
 
     execute(request, next){
 
-        console.log('EXEC ' + Object.keys(this));
-        console.log('EXEC count ' + this.count);
-        console.log('EXEC index ' + this.index);
-        console.log('EXEC series ' + this.series);
-        console.log('EXEC fns ' + this.fn);
-
         if ( (this.index + 1) < (this.count) ) {
-        
-            console.log('****');
-            console.log('**** ' + (this.index + 1));
-            console.log('**** name ' + this.series[(this.index + 1)].name);
-            console.log('**** fn ' + this.series[(this.index + 1)].fn);
-
-
-            console.log('---------');
-            console.log(typeof next);
 
             return this.fn('requestObject', this.series[(this.index + 1)]);
-
-            // return this.fn('requestObject', () => {
-            // 
-            //     console.log('test boobla');
-            // });
         }
-
-        console.log('**** OOO');
 
         return this.fn('requestObject', this.end(null, request));
     }
@@ -92,6 +69,8 @@ exports = module.exports = internals.Cycle = function (seriesName, arrayOfFuncs,
 
     this.series =  this._series[0];
 
+    // Place end on cycle array
+
     const end = new R(
         'end',
         'callback created by developer',
@@ -103,7 +82,6 @@ exports = module.exports = internals.Cycle = function (seriesName, arrayOfFuncs,
 
     this._series.push(end);
 
-    // Place end step to lifecycle
 
 
     // for (let i = 0; i < this._seriesLength; ++i) {
