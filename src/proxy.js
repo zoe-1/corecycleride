@@ -15,6 +15,8 @@ function monster1(disposition) {
 
     this.next = function () {
     
+        console.log('next');
+        console.log(this.disposition);
     }
 }
 
@@ -45,7 +47,7 @@ const SozoCycle = function (seriesName, seriesOfFuncs) {
 
     console.log('CONSTRUCTING ' + seriesName);
 
-    this.series = []; 
+    this._series = []; 
 
     // return new Proxy(sum, handler1);
     // return new Proxy(monster1, handler1);
@@ -56,14 +58,16 @@ const SozoCycle = function (seriesName, seriesOfFuncs) {
     const test = new Cycle('testName');
 
     console.log('test.dispostion set: ' + test.disposition);
+    // test.next();
 
-    this.series[0] = test; 
+    this._series.push(test); 
 
     // Starts series execution
 
     this.start = function () {
     
-        console.log('SozoCycle.start ' + this.series[0].disposition);
+        console.log('SozoCycle.start ' + this._series[0].disposition);
+        // this._series[0].next()
     }
 
     return this;
