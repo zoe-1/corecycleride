@@ -17,9 +17,9 @@ describe.only('/proxy', () => {
 
     it('build sozo series from proxy', () => {
 
-        const finalCB = function (err, result) {
+        const finalCB = function (payload, err, result) {
 
-            console.log('FINISHED VALUES ' + err + ' ' + result);
+            console.log('FINISHED VALUES ' + err + ' ' + result + ' ' + payload);
             console.log(Object.keys(result));
             console.log('one ' + result.one);
             console.log('two ' + result.two);
@@ -46,34 +46,34 @@ internals.series = [
     {
         name: 'one',
         description: 'first function to call',
-        fn: function (request, next) {
+        fn: function (payload, request, next) {
 
-            // request.data = {}
-            // request.data.one = 'one data';
+            // request.result = {}
+            // request.result.one = 'one received payload';
 
-            console.log('one executing');
+            console.log('one executing ' + payload);
             return next('one payload');
         }
     },
     {
         name: 'two',
         description: 'second function to call',
-        fn: function (request, next) {
+        fn: function (payload, request, next) {
 
             // request.data.two = 'two data';
 
-            console.log('two executing ');
+            console.log('two executing ' + payload);
             return next('two payload');
         }
     },
     {
         name: 'three',
         description: 'third function to call',
-        fn: function (request, next) {
+        fn: function (payload, request, next) {
 
             // request.data.three = 'two data';
 
-            console.log('three executing');
+            console.log('three executing ' + payload);
             return next('three payload');
         }
     }

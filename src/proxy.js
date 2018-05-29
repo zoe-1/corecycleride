@@ -46,26 +46,29 @@ const cycleNext = function (internals, request, seriesName, seriesOfFuncs, callb
 
     buildRequestObject(internals, request);
 
-    internals.next = function (result) {
+    internals.next = function (payload) {
 
         // check if result is Error or Boom
+        // if error skip to appropriate step in lifecycle
 
         const currentIndex = internals.index;
         ++internals.index;
 
-        internals.request.result[internals.series[currentIndex].name] = result;
+        internals.request.result[internals.series[currentIndex].name] = payload;
 
         if ( currentIndex < internals.count ) {
 
             return internals.series[currentIndex].fn(
-                internals.result,
+                payload,
+                internals.request,
                 internals.next
             );
         }
 
         return internals.series[currentIndex].fn(
+            payload,
             'errorStatus',
-            internals.request.result
+            internals.request.result // cb(payload, err, result)
         );
     };
 
