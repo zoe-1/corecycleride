@@ -19,14 +19,12 @@ const buildRequestObject = function (internals, request) {
 
     internals.request = {};
     internals.request.result = {};
-    internals.request.result.start = {};
 
     for (let i = 0; i < internals.series.length; ++i) {
 
         // console.log('iterate1' + internals.series[i].name);
 
         internals.request.result[internals.series[i].name] = {};
-
     };
 
     return;
@@ -69,25 +67,6 @@ const cycleNext = function (internals, request, seriesName, seriesOfFuncs, callb
             'errorStatus',
             internals.request.result
         );
-
-        // console.log('load payload ' + internals.series[internals.index - 1].name);
-        // console.log('internals.request.result  ' +
-        //   internals.request.result[internals.series[internals.index - 1].name]);
-
-        // if ( internals.index === (internals.count + 1) ) {
-
-        //     internals.request.result[internals.series[internals.index - 1].name] = result;
-
-        //     return internals.series[internals.index - 1].fn(
-        //         'errorStatus',
-        //         internals.request.result);
-        // }
-
-        // internals.result[internals.series[internals.index - 1].name] = result;
-
-        // internals.request.result[internals.series[internals.index - 1].name] = result;
-
-        // return internals.series[internals.index - 1].fn(internals.result, internals.next);
     };
 
     this.start = function (value) {
@@ -112,11 +91,6 @@ const cycleHandler = {
     construct(target, args) {
 
         // validate
-        // @rule series c/n have `start` as function name.
-        //       sozo uses `reqeust.result.start` as key word
-        //       to store the initial payload received to start.
-        //       * function names are used to create corresponding
-        //         `internals.request.result.function_name` storage objects.
 
         console.log('cycleNext constructor called ' + args[0]);
 

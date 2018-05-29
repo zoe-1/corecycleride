@@ -19,7 +19,7 @@ describe.only('/proxy', () => {
 
         const finalCB = function (err, result) {
 
-            console.log('FINISHED VALUES' + err + ' ' + result);
+            console.log('FINISHED VALUES ' + err + ' ' + result);
             console.log(Object.keys(result));
             console.log('one ' + result.one);
             console.log('two ' + result.two);
