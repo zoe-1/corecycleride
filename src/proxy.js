@@ -3,20 +3,38 @@
 const buildFinalCallback = function (internals, callback) {
 
     const finalCB = function () {
-    
+
         return {
-            name: 'finalCallback', 
+            name: 'final',
             description: 'fuction provided by developer to retrieve final value',
             fn: callback // callback(err, result)
-        }
-    }
+        };
+    };
 
     return internals.series.push(finalCB());
 
 };
 
+const buildRequestObject = function (internals, request) {
 
-const cycleNext = function (internals, seriesName, seriesOfFuncs, callbackEnd) {
+    internals.request = {};
+    internals.request.result = {};
+    internals.request.result.start = {};
+
+    for (let i = 0; i < internals.series.length; ++i) {
+
+        // console.log('iterate1' + internals.series[i].name);
+
+        internals.request.result[internals.series[i].name] = {};
+
+    };
+
+    return;
+
+};
+
+
+const cycleNext = function (internals, request, seriesName, seriesOfFuncs, callbackEnd) {
 
     console.log('Initializing cycleNext');
 
@@ -28,24 +46,49 @@ const cycleNext = function (internals, seriesName, seriesOfFuncs, callbackEnd) {
 
     buildFinalCallback(internals, callbackEnd);
 
-    internals.next = function (value) {
+    buildRequestObject(internals, request);
 
-        // check if value is Error or Boom
+    internals.next = function (result) {
 
-        if (internals.index < internals.count) {
-        
-            ++internals.index;
+        // check if result is Error or Boom
+
+        const currentIndex = internals.index;
+        ++internals.index;
+
+        internals.request.result[internals.series[currentIndex].name] = result;
+
+        if ( currentIndex < internals.count ) {
+
+            return internals.series[currentIndex].fn(
+                internals.result,
+                internals.next
+            );
         }
 
-        if ( internals.index === internals.count ) {
+        return internals.series[currentIndex].fn(
+            'errorStatus',
+            internals.request.result
+        );
 
-            return internals.series[internals.index].fn('requestObject', 'RESULT_FINAL');
-        }
+        // console.log('load payload ' + internals.series[internals.index - 1].name);
+        // console.log('internals.request.result  ' +
+        //   internals.request.result[internals.series[internals.index - 1].name]);
 
-        return internals.series[internals.index - 1].fn('requestObject', internals.next);
+        // if ( internals.index === (internals.count + 1) ) {
+
+        //     internals.request.result[internals.series[internals.index - 1].name] = result;
+
+        //     return internals.series[internals.index - 1].fn(
+        //         'errorStatus',
+        //         internals.request.result);
+        // }
+
+        // internals.result[internals.series[internals.index - 1].name] = result;
+
+        // internals.request.result[internals.series[internals.index - 1].name] = result;
+
+        // return internals.series[internals.index - 1].fn(internals.result, internals.next);
     };
-
-    const testName = 'DynamicFunctionName';
 
     this.start = function (value) {
 
@@ -53,11 +96,11 @@ const cycleNext = function (internals, seriesName, seriesOfFuncs, callbackEnd) {
 
         console.log('cycleNext.start');
 
-        internals.name = value;
+        // internals.request.result.start = value;
 
-        console.log(internals);
+        // console.log(internals);
 
-        internals.next();
+        internals.next(value);
     };
 
     return this;
@@ -68,7 +111,12 @@ const cycleHandler = {
 
     construct(target, args) {
 
-        // validations
+        // validate
+        // @rule series c/n have `start` as function name.
+        //       sozo uses `reqeust.result.start` as key word
+        //       to store the initial payload received to start.
+        //       * function names are used to create corresponding
+        //         `internals.request.result.function_name` storage objects.
 
         console.log('cycleNext constructor called ' + args[0]);
 
@@ -83,16 +131,21 @@ const SozoCycleProxy = function (seriesName, seriesOfFuncs, callbackEnd) {
 
     const internals = {};
 
+    const request = {};
+
     const CycleProxy = new Proxy(cycleNext, cycleHandler);
 
-    const Cycle = new CycleProxy(internals, seriesName, seriesOfFuncs, callbackEnd);
+    // const Cycle = new CycleProxy(internals, seriesName, seriesOfFuncs, callbackEnd);
 
-    const test = new CycleProxy(internals, seriesName, seriesOfFuncs, callbackEnd).start;
+    const StartCycle = new CycleProxy(
+        internals,
+        request,
+        seriesName,
+        seriesOfFuncs,
+        callbackEnd
+    ).start;
 
-    test.boom = 'test boom';
-
-    return test;
-    // return Cycle.start;
+    return StartCycle;
 };
 
 exports = module.exports = SozoCycleProxy;

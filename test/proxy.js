@@ -20,11 +20,17 @@ describe.only('/proxy', () => {
         const finalCB = function (err, result) {
 
             console.log('FINISHED VALUES' + err + ' ' + result);
+            console.log(Object.keys(result));
+            console.log('one ' + result.one);
+            console.log('two ' + result.two);
+            console.log('three ' + result.three);
+            console.log('final ' + result.final);
+
         };
 
         const next = new SozoCycle('CycleName', internals.series, finalCB);
 
-        const payload = { name: 'New Dispostion is Set', data: 'more data' };
+        const payload = 'starting payload';
 
         next(payload);
 
@@ -57,7 +63,7 @@ internals.series = [
             // request.data.two = 'two data';
 
             console.log('two executing ');
-            return next('two completed');
+            return next('two payload');
         }
     },
     {
@@ -68,7 +74,7 @@ internals.series = [
             // request.data.three = 'two data';
 
             console.log('three executing');
-            return next('three completed');
+            return next('three payload');
         }
     }
 ];
