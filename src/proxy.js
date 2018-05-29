@@ -1,32 +1,63 @@
 'use strict';
 
+const buildFinalCallback = function (internals, callback) {
 
-const internals = {};
-
-
-internals.invariant = function (key, action) {
-
-    if (key[0] === '_') {
-        throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    const finalCB = function () {
+    
+        return {
+            name: 'finalCallback', 
+            description: 'fuction provided by developer to retrieve final value',
+            fn: callback // callback(err, result)
+        }
     }
+
+    return internals.series.push(finalCB());
+
 };
 
-const cycleNext = function (disposition) {
 
-    this.count = 0;
-    this.disposition = disposition;
+const cycleNext = function (internals, seriesName, seriesOfFuncs, callbackEnd) {
 
-    this.next = function (args) {
+    console.log('Initializing cycleNext');
 
-        console.log('cycleNext.next');
-        console.log(args);
-        console.log(this);
+    internals.name = seriesName;
+    internals.series = seriesOfFuncs;
+    internals.end = callbackEnd;
+    internals.count = seriesOfFuncs.length;
+    internals.index = 0;
+
+    buildFinalCallback(internals, callbackEnd);
+
+    internals.next = function (value) {
+
+        // check if value is Error or Boom
+
+        if (internals.index < internals.count) {
+        
+            ++internals.index;
+        }
+
+        if ( internals.index === internals.count ) {
+
+            return internals.series[internals.index].fn('requestObject', 'RESULT_FINAL');
+        }
+
+        return internals.series[internals.index - 1].fn('requestObject', internals.next);
     };
 
-    this.start = function () {
+    const testName = 'DynamicFunctionName';
 
-        console.log('start');
-        console.log(this.disposition);
+    this.start = function (value) {
+
+        // check if value is Error or Boom
+
+        console.log('cycleNext.start');
+
+        internals.name = value;
+
+        console.log(internals);
+
+        internals.next();
     };
 
     return this;
@@ -37,24 +68,11 @@ const cycleHandler = {
 
     construct(target, args) {
 
+        // validations
+
         console.log('cycleNext constructor called ' + args[0]);
 
         return new target(...args);
-    },
-
-    defineProperty(target, key, descriptor) {
-
-        internals.invariant(key, 'define');
-        return true;
-    },
-
-    apply: function (target, thisArg, argumentsList) {
-
-        console.log('APPLY_CALLED!!');
-        // console.log(`CycleProxy argumentList: ${argumentsList}`);
-
-        // expected output: "Calculate sum: 1,2"
-        return target(argumentsList[0], argumentsList[1]);
     }
 };
 
@@ -63,14 +81,18 @@ const SozoCycleProxy = function (seriesName, seriesOfFuncs, callbackEnd) {
 
     console.log('ProxySetup seriesName ' + seriesName);
 
+    const internals = {};
+
     const CycleProxy = new Proxy(cycleNext, cycleHandler);
-    // CycleProxy._test = 'fail';
 
-    const next = new CycleProxy('nextValueSet');
+    const Cycle = new CycleProxy(internals, seriesName, seriesOfFuncs, callbackEnd);
 
-    this._series = [];
+    const test = new CycleProxy(internals, seriesName, seriesOfFuncs, callbackEnd).start;
 
-    return next;
+    test.boom = 'test boom';
+
+    return test;
+    // return Cycle.start;
 };
 
 exports = module.exports = SozoCycleProxy;

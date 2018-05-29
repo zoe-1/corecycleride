@@ -17,47 +17,58 @@ describe.only('/proxy', () => {
 
     it('build sozo series from proxy', () => {
 
-        const Cycle = new SozoCycle('CycleName', 'DataStore');
+        const finalCB = function (err, result) {
 
-        Cycle.next('Dispostion is Set');
+            console.log('FINISHED VALUES' + err + ' ' + result);
+        };
 
-        expect(Cycle).to.be.an.object();
+        const next = new SozoCycle('CycleName', internals.series, finalCB);
+
+        const payload = { name: 'New Dispostion is Set', data: 'more data' };
+
+        next(payload);
+
+        // console.log('next keys ' + Object.keys(next));
+        // console.log('next.name ' + next.name);
+        // console.log('next.boom ' + next.boom);
+
+        // expect(Cycle).to.be.an.object();
     });
 });
 
-internals.requests = [
+internals.series = [
     {
         name: 'one',
         description: 'first function to call',
-        fn: function (request, series) {
+        fn: function (request, next) {
 
             // request.data = {}
             // request.data.one = 'one data';
 
             console.log('one executing');
-            return series.next();
+            return next('one payload');
         }
     },
     {
         name: 'two',
         description: 'second function to call',
-        fn: function (request, series) {
+        fn: function (request, next) {
 
             // request.data.two = 'two data';
 
             console.log('two executing ');
-            return series.next('two completed');
+            return next('two completed');
         }
     },
     {
         name: 'three',
         description: 'third function to call',
-        fn: function (request, series) {
+        fn: function (request, next) {
 
             // request.data.three = 'two data';
 
             console.log('three executing');
-            return series.next('three completed');
+            return next('three completed');
         }
     }
 ];
