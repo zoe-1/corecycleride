@@ -12,7 +12,6 @@ const buildFinalCallback = function (internals, callback) {
     };
 
     return internals.series.push(finalCB());
-
 };
 
 const buildRequestObject = function (internals, request) {
@@ -28,7 +27,6 @@ const buildRequestObject = function (internals, request) {
     };
 
     return;
-
 };
 
 
