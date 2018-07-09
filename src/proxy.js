@@ -49,7 +49,7 @@ const cycleNext = function (internals, request, seriesName, seriesOfFuncs, callb
         // check if result is Error or Boom
         // if error skip to appropriate step in lifecycle
 
-        const currentIndex = internals.index;
+        const currentIndex = internals.index; // @todo clone this.
         ++internals.index;
 
         internals.request.result[internals.series[currentIndex].name] = payload;
