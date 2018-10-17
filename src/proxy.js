@@ -93,7 +93,7 @@ const cycleHandler = {
 
         // validate
 
-        console.log('cycleNext constructor called ' + args[0]);
+        console.log('cycleHandler constructor called ' + args[0]);
 
         return new target(...args);
     }

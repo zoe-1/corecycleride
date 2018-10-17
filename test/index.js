@@ -19,6 +19,7 @@ describe('/index', () => {
         const ProcessData = new SozoCycle('boom', internals.requests, (err, result) => {
 
             console.log('FINISHED ' + err + ' ' + result);
+            // console.log('FINISHED result ' + result);
         });
 
         console.log(Object.keys(ProcessData));

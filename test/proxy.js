@@ -49,10 +49,9 @@ internals.series = [
         fn: function (payload, request, next) {
 
             // request.result = {}
-            // request.result.one = 'one received payload';
 
             console.log('one executing ' + payload);
-            return next('one payload');
+            return next('first payload');
         }
     },
     {
@@ -63,7 +62,7 @@ internals.series = [
             // request.data.two = 'two data';
 
             console.log('two executing ' + payload);
-            return next('two payload');
+            return next('second payload');
         }
     },
     {
@@ -74,7 +73,7 @@ internals.series = [
             // request.data.three = 'two data';
 
             console.log('three executing ' + payload);
-            return next('three payload');
+            return next('third payload');
         }
     }
 ];
