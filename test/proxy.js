@@ -20,17 +20,23 @@ describe.only('/proxy', () => {
         const finalCB = function (payload, err, result) {
 
             console.log('FINISHED VALUES ' + err + ' ' + result + ' ' + payload);
-            console.log(Object.keys(result));
-            console.log('one ' + result.one);
-            console.log('two ' + result.two);
-            console.log('three ' + result.three);
-            console.log('final ' + result.final);
+            // console.log(Object.keys(result));
+            // console.log('  one** ' + result.one);
+            // console.log('  two** ' + result.two);
+            // console.log('three** ' + result.three);
+            // console.log('final** ' + result.final);
 
+            expect(result).to.be.an.object();
+
+            expect(result.one).to.equal('payload original');
+            expect(result.two).to.equal('payload one');
+            expect(result.three).to.equal('payload two');
+            expect(result.final).to.equal('payload three');
         };
 
         const next = new SozoCycle('CycleName', internals.series, finalCB);
 
-        const payload = 'starting payload';
+        const payload = 'payload original';
 
         next(payload);
 
@@ -48,10 +54,8 @@ internals.series = [
         description: 'first function to call',
         fn: function (payload, request, next) {
 
-            // request.result = {}
-
-            console.log('one executing ' + payload);
-            return next('first payload');
+            // console.log('one executing ' + payload);
+            return next('payload one');
         }
     },
     {
@@ -61,8 +65,8 @@ internals.series = [
 
             // request.data.two = 'two data';
 
-            console.log('two executing ' + payload);
-            return next('second payload');
+            // console.log('two executing ' + payload);
+            return next('payload two');
         }
     },
     {
@@ -72,8 +76,8 @@ internals.series = [
 
             // request.data.three = 'two data';
 
-            console.log('three executing ' + payload);
-            return next('third payload');
+            // console.log('three executing ' + payload);
+            return next('payload three');
         }
     }
 ];
