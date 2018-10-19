@@ -1,14 +1,19 @@
 # sozo-cycle
 
+## Websters Dictionary
+
+cycle definition:
+* a course or series of events or operations that
+  lead back to the starting point.
+* one complete performance of a periodic process.
 
 ## Module Docs
 
-SozoCycleProxy
-cycleHandler
-cycleNext
-buildRequestObject
 buildFinalCallback
-
+buildRequestObject
+cycleNext
+cycleHandler
+SozoCycleProxy
 
 buildFinalCallback = function (internals, callback)
 
@@ -22,10 +27,15 @@ SozoCycleProxy = function (seriesName, seriesOfFuncs, callbackEnd)
 
 exports = module.exports = SozoCycleProxy;
 
+## Build callback (handles cycle result)
+
+const finalCB = function (payload, err, result) {
+
+};
 
 ## Build Cycle Object
 
-const next = new SozoCycle('CycleName', internals.series, finalCB);
+const cycle = new SozoCycle('CycleName', internals.series, finalCB);
 
 internals.series = [ArrayOfSeriesObjects];
 
@@ -42,3 +52,12 @@ SeriesObject (below):
         return next('first payload');
     }
 },
+
+## send payload to series cycle 
+
+const payload = 'payload original';
+
+cycle(payload);
+
+
+

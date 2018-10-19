@@ -32,6 +32,8 @@ describe.only('/proxy', () => {
             expect(result.two).to.equal('payload one');
             expect(result.three).to.equal('payload two');
             expect(result.final).to.equal('payload three');
+
+            expect(payload).to.equal(result.final); // payload three
         };
 
         const next = new SozoCycle('CycleName', internals.series, finalCB);
