@@ -27,6 +27,17 @@ SozoCycleProxy = function (seriesName, seriesOfFuncs, callbackEnd)
 
 exports = module.exports = SozoCycleProxy;
 
+## Module Rewrite
+
+internals
+setExtensions
+buildFinalCallback
+decorateRequestObject
+cycleNext
+Cycle
+
+exports = module.exports = Cycle;
+
 ## Build callback (handles cycle result)
 
 const finalCB = function (payload, err, result) {
@@ -53,11 +64,21 @@ SeriesObject (below):
     }
 },
 
-## send payload to series cycle 
+## send payload to series cycle
 
 const payload = 'payload original';
 
 cycle(payload);
 
+
+## Build Cycle Object with Extensions.
+
+Extensions my be database connections passed in from
+the calling program.
+
+
+const extensions = = {
+    db: DB connection object
+};
 
 

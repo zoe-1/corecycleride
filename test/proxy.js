@@ -13,7 +13,7 @@ const expect = Code.expect;
 const internals = {};
 
 
-describe.only('/proxy', () => {
+describe('/proxy', () => {
 
     it('build sozo series from proxy', () => {
 

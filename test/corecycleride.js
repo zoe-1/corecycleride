@@ -13,10 +13,26 @@ const internals = {};
 const Cycle = require('../src/corecycleride');
 
 
-describe('/core cycle ride', () => {
+describe.only('/core cycle ride', () => {
 
     it('cycle series rewrite', () => {
 
+        const finalCallback = function (payload, err, result) {
+
+            console.log('finalCallback');
+        };
+
+        const extensions = {
+            db: {
+                name: 'mockdb',
+                conn: 'mockconnection'
+            }
+        };
+
+        const Series = new Cycle('testCycle', internals.seriesOfFuncs, extensions, finalCallback);
+
+        Series('start series');
     });
 });
 
+internals.seriesOfFuncs = [];
