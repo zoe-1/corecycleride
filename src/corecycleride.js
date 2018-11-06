@@ -12,24 +12,27 @@
 //
 // buildFinalCallback
 //  * builds the final callback object as a SeriesObject.
-//    Then, loads the SeriesObject as the last object
+//    Then, loads the SeriesEventObject as the last event
 //    in the series to be executed.
 //
 //
-// decorateRequestObject
+// buildRequestObject
 //  * decorate request object to contain results for
 //    each step in the cycle: `request.result.name`.
 //    `name`: is defined by the developer in the series object.
 //  * ext: needs ability to add extensions.
 //         For example, a database connection could be added (datastore).
 //         This could be done when the Cycle object is constructed.
-//
-// onConstruction  [idea]
 //  * parameters
-//  * execute functions on contruction of the
-//    object. Example database connection.
-//    Convenient to have but will make constructor more
-//    cluttered. Introduces asynchronus code into the constructor.
+//      - internals
+//      - extensions
+//      - request
+//  * request object
+//      - payloads
+//        request.payloads.function_names
+//        request.payloads.one
+//      - ext
+//
 //
 // cycleNext
 //  *
@@ -59,7 +62,7 @@ const buildFinalCallback = function (internals, callback) {
 
 };
 
-const decorateRequestObject =  function (internals, request) {
+const buildRequestObject =  function (internals, extensions, request) {
 
 };
 
@@ -76,21 +79,10 @@ const cycleNext = function (internals, request, seriesName, seriesOfFuncs, exten
     // buildRequestObject(internals, request);
     // decorateRequestObject(internals, request);
 
-    // @todo before continuing on
-    //       write documentation for series function signature
-    //       and request object specs.
-    //       * seriesFunctions
-    //       * request object 
-    //         generated from series functions. Allows for results of
-    //         each function in series to be stored in request object.
-    //       * buildFinalCallback () receives final callback and 
-    //         builds an object SeriesFunction object  
-    //         and loads the callbackEnd into SeriesFunction.fn()
-
     const next = function (payload) {
 
         console.log('cycleNext.next ' + payload);
-        console.log('extensions.db.name' + extensions.db.name);
+        console.log('extensions.db.name ' + extensions.db.name);
     };
 
     this.start = function (payload) {
@@ -112,7 +104,7 @@ const Cycle = function (seriesName, seriesOfFuncs, extensions, callbackEnd) {
 
     // setExtensions(extensions, request, arguments);
 
-    // @question 
+    // @question
     // do I want to just return a function.
     // If do not return object it limits ability to groups
     // series by name in something similar to sofajs.
