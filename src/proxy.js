@@ -7,7 +7,7 @@ const buildFinalCallback = function (internals, callback) {
         return {
             name: 'final',
             description: 'fuction provided by developer to retrieve final value',
-            fn: callback // callback(err, result)
+            fn: callback // callback(err, result) 
         };
     };
 

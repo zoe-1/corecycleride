@@ -31,7 +31,7 @@ a global variable of the script. Avoids singleton issues.
 
 ## Build callback (handles cycle result)
 
-const finalCB = function (payload, err, result) {
+const finalCB = function (payload, err, payloads) {
 
 };
 

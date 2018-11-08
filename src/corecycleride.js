@@ -60,29 +60,82 @@ const setExtensions = function (extensions, request, initArguments) {
 
 const buildFinalCallback = function (internals, callback) {
 
+    const finalCB = function () {
+
+        return {
+            name: 'final',
+            description: 'fuction provided by developer to return series final value',
+            fn: callback // callback(payload, err, result)
+        };
+    };
+
+    return internals.series.push(finalCB());
 };
 
 const buildRequestObject =  function (internals, extensions, request) {
 
+    // request = {};
+    request.payloads= {};
+    request.ext = extensions;
+
+    for (let i = 0; i < internals.series.length; ++i) {
+
+        // console.log('iterate1' + internals.series[i].name);
+
+        request.payloads[internals.series[i].name] = {};
+    };
+
+    return;
 };
 
 const cycleNext = function (internals, request, seriesName, seriesOfFuncs, extensions, callbackEnd) {
 
-    // internals.name = seriesName;
-    // internals.series = seriesOfFuncs;
-    // internals.end = callbackEnd;
+    internals.name = seriesName;
+    internals.series = seriesOfFuncs;
     internals.count = seriesOfFuncs.length;
     internals.index = 0;
 
-    // buildFinalCallback(internals, callbackEnd);
+    buildFinalCallback(internals, callbackEnd);
 
-    // buildRequestObject(internals, request);
-    // decorateRequestObject(internals, request);
+    buildRequestObject(internals, extensions, request);
 
     const next = function (payload) {
 
         console.log('cycleNext.next ' + payload);
         console.log('extensions.db.name ' + extensions.db.name);
+
+        let currentIndex = internals.index;
+        let error = null;
+
+        ++internals.index;
+
+        // check if result is Error or Boom
+        // if error skip to appropriate step in lifecycle
+
+        if ((payload.typeOf) && (payload.typeOf === 'CycleError')) {
+        
+            // exit cycle error thrown
+
+            currentIndex = internals.index = internals.count;
+            error = payload;
+        }
+
+        request.payloads[internals.series[currentIndex].name] = payload;
+
+        if ( currentIndex < internals.count ) {
+
+            return internals.series[currentIndex].fn(
+                payload,
+                request,
+                next
+            );
+        }
+
+        return internals.series[currentIndex].fn(
+            payload,
+            error,
+            request.payloads // cb(payload, err, result)
+        );
     };
 
     this.start = function (payload) {
@@ -116,7 +169,7 @@ const Cycle = function (seriesName, seriesOfFuncs, extensions, callbackEnd) {
         seriesOfFuncs,
         extensions,
         callbackEnd
-    ).start;
+    );
 
     return StartCycle;
 };
