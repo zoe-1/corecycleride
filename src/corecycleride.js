@@ -157,10 +157,8 @@ const Cycle = function (seriesName, seriesOfFuncs, extensions, callbackEnd) {
 
     // setExtensions(extensions, request, arguments);
 
-    // @question
-    // do I want to just return a function.
-    // If do not return object it limits ability to groups
-    // series by name in something similar to sofajs.
+    // Build validations for extensions.
+    // Plan for this to be an optional parameter.
 
     const StartCycle = new cycleNext(
         internals,
