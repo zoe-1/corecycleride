@@ -1,5 +1,5 @@
 {
-  "name": "sozo-cycle",
+  "name": "corecycleride",
   "version": "0.0.1",
   "description": "Execute series of functions as waterfall",
   "main": "src/index.js",

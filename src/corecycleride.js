@@ -60,6 +60,8 @@ const setExtensions = function (extensions, request, initArguments) {
 
 const buildFinalCallback = function (internals, callback) {
 
+    internals.callback = callback;
+
     const finalCB = function () {
 
         return {
@@ -72,11 +74,12 @@ const buildFinalCallback = function (internals, callback) {
     return internals.series.push(finalCB());
 };
 
-const buildRequestObject =  function (internals, extensions, request) {
+const buildRequestObject =  function (internals, extension, request) {
 
-    // request = {};
+    request.cache = extension.requestCache
+    request.ext = extension;
+    request.endCallback = internals.callback;
     request.payloads= {};
-    request.ext = extensions;
 
     for (let i = 0; i < internals.series.length; ++i) {
 
@@ -94,10 +97,11 @@ const cycleNext = function (internals, request, seriesName, seriesOfFuncs, exten
     internals.series = seriesOfFuncs;
     internals.count = seriesOfFuncs.length;
     internals.index = 0;
+    internals.callback = function () {}; // set at buildFinalCallback 
 
     buildFinalCallback(internals, callbackEnd);
 
-    buildRequestObject(internals, extensions, request);
+    buildRequestObject(internals, extensions, request, callbackEnd);
 
     const next = function (payload) {
 
